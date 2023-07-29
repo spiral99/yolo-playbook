@@ -24,7 +24,7 @@ Execution flow
 2. Use the Terraform output to get the IP address or DNS name of the provisioned instance.
 3. Use Ansible to execute the Yolo_playbook.yml playbook on the provisioned server.
 
-bash commandline execution
+# bash commandline execution
 <img width="710" alt="image" src="https://github.com/spiral99/yolo-playbook/assets/65442188/25a5f0a9-0e54-4f56-8187-8b77331444f2">
 
 
