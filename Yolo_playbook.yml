@@ -1,0 +1,58 @@
+---
+- name: Install Docker and Docker Compose
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install dependencies
+      apt:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+
+    - name: Install MongoDB on Ubuntu/Debian
+      apt:
+        name: mongodb  # Package name for MongoDB on Debian/Ubuntu
+        state: present
+
+    - name: Start MongoDB service
+      systemd:
+        name: mongod
+        state: started
+        enabled: yes
+
+    - name: Add Docker repository key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Install Docker Compose
+      pip:
+        name: docker-compose
+        state: present
+    
+    - name: Clone the GitHub repository
+      git:
+        repo: https://github.com/spiral99/yolo-playbook.git
+        dest: /app
+        version: master  # Replace 'master' with the branch or tag you want to clone
+    
+    - name: Start containers with Docker Compose
+      command: docker-compose up -d
+      args:
+        chdir: /app
